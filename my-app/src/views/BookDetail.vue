@@ -22,16 +22,49 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from "vue";
+import { defineProps, defineEmits, computed } from "vue";
 
-const selectIndex = inject("selectIndex");
-const searchResult = inject("searchResult");
-const cart = inject('cart')
-const dialog = inject('dialog')
-const book = searchResult[selectIndex.value];
+const emit = defineEmits([
+  'emitAddToCart',
+  'emitCartModal' 
+])
+
+
+const props = defineProps({
+  searchResult: {
+    type: Array,
+    required: true
+  },
+  cart: {
+    type: Array
+  },
+  selectIndex: {
+    type: Number,
+    required: true
+  },
+  cartModal: {
+    type: Boolean
+  }
+})
+
+const book: object = computed(() => props.searchResult[props.selectIndex])
+const cartModal = computed({
+  get: () => props.cartModal,
+  set: (bool) => {
+    emit('emitCartModal', bool)
+  }
+})
+const cart: object[] = computed({
+  get: () => props.cart,
+  set: (cart) => {
+    emit('emitAddToCart', cart)
+  }
+})
+
 
 const addToCart = () => {
-  cart.push(searchResult[selectIndex.value])
-  dialog.cart = true
+  cart.value.push(props.searchResult[props.selectIndex])
+  cartModal.value = true
 }
 </script>
+s
