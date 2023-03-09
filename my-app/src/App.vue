@@ -6,11 +6,7 @@
     />
     <v-main class="main">
       <router-view 
-      :searchResult="props.searchResult"
-      :selectIndex="props.selectIndex"
-      :cart="props.cart"
-      :detailModal="props.detailModal"
-      :cartModal="props.cartModal"
+      v-bind="props"
       @emitResult="getResult"
       @emitSelectIndex="getSelectIndex"
       @emitAddToCart="addToCart"
@@ -33,13 +29,30 @@ import GlobalHeader from "@/components/GlobalHeader.vue";
 import CartModal from "@/components/CartModal.vue";
 import { reactive, } from "vue";
 
-const props: {
-  searchResult: object[]
-  cart: object[]
+// props
+interface Props {
+  searchResult: [
+    {
+      title?: string
+      image?: string
+      description?: string
+      authors?: string
+      publishDate?: string
+    }
+  ]
+  cart: [
+    {
+      title?: string
+      image?: string
+      description?: string
+    }
+  ]
   selectIndex: number
   detailModal: boolean
   cartModal: boolean
-} = reactive({
+}
+
+const props:Props = reactive({
   searchResult: [],
   cart: [],
   selectIndex: 0,
@@ -47,8 +60,8 @@ const props: {
   cartModal: false,
 })
 
-
-const getResult = (searchResult: object[]) => {
+// emit
+const getResult = (searchResult: [{title: string; image: string; description: string}]) => {
   props.searchResult = searchResult
 }
 const getSelectIndex = (selectIndex: number) => {
@@ -71,5 +84,13 @@ const isCartModalOpen = (cartModal: boolean) => {
 .main {
   width: 980px;
   margin: 0 auto;
+}
+
+li {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
 }
 </style>
